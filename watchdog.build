@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project name="watchdog" default="build" xmlns="http://nant.sf.net/release/0.92/nant.xsd">
+	<loadtasks assembly="src/packages/FluentMigrator.Tools.1.1.2.1/tools/AnyCPU/40/FluentMigrator.NAnt.dll" />
+
+	<property name="Configuration" value="Debug" if="${not property::exists('Configuration')}" />
+	<property name="Platform" value="Any CPU" if="${not property::exists('Platform')}" />
+
+	<target name="npm">
+		<if test="${platform::is-windows()}">
+			<call target="npm.windows" />
+		</if>
+	</target>
+
+	<target name="npm.windows">
+		<exec program="cmd">
+			<arg line="/c npm.cmd" />
+			<arg line="${args}" />
+		</exec>
+	</target>
+
+	<target name="node.less">
+		<if test="${not directory::exists('node_modules/less')}">
+			<property name="args" value="install less" />
+			<call target="npm" />
+		</if>
+	</target>
+
+	<target name="node.react-tools">
+		<if test="${not directory::exists('node_modules/react-tools')}">
+			<property name="args" value="install react-tools" />
+			<call target="npm" />
+		</if>
+	</target>
+		
+	<target name="node.requirejs">
+		<if test="${not directory::exists('node_modules/requirejs')}">
+			<property name="args" value="install requirejs" />
+			<call target="npm" />
+		</if>
+	</target>
+
+	<target name="build.watchdog.web.jsx" depends="node.react-tools">
+		<uptodate property="jsx.uptodate">
+			<sourcefiles>
+				<include name="src/watchdog.web.app/js/views/**.jsx" />
+			</sourcefiles>
+			<targetfiles>
+				<include name="src/watchdog.web.app/js/views/**.js" />
+			</targetfiles>
+		</uptodate>
+		<if test="${not jsx.uptodate}">
+			<property name="currentDirectory" value="${path::get-full-path('.')}" />
+			<foreach item="Folder" property="folderName">
+				<in>
+					<items>
+						<include name="src/watchdog.web.app/js/views/**.jsx" />
+					</items>
+				</in>
+				<do>
+					<property name="folderName" value="${string::replace(folderName, currentDirectory, '.')}" />
+					<exec program="node" verbose="true">
+						<arg line="${path::get-full-path('node_modules/react-tools/bin/jsx')}" />
+						<arg line="-x jsx" />
+						<arg line="${folderName}" />
+						<arg line="${string::replace(folderName, '.jsx', '')}" />
+					</exec>
+				</do>
+			</foreach>
+		</if>
+		
+	</target>
+
+	<target name="clean.watchdog.web.jsx">
+		<foreach item="Folder" property="folderName">
+			<in>
+				<items>
+					<include name="src/watchdog.web.app/js/views/*" />
+					<include name="src/watchdog.web.app/js/views/widgets/*" />
+					<exclude name="src/watchdog.web.app/js/views/**.jsx" />
+					<exclude name="src/watchdog.web.app/js/views/widgets" />
+					<exclude name="src/watchdog.web.app/js/views" />
+				</items>
+			</in>
+			<do>
+				<delete dir="${folderName}" failonerror="false" />
+			</do>
+		</foreach>
+	</target>
+
+	<target name="build.watchdog.web.js" depends="node.requirejs, build.watchdog.web.jsx">
+		<uptodate property="js.uptodate">
+			<sourcefiles>
+				<include name="src/watchdog.web.app/js/**.js" />
+				<exclude name="src/watchdog.web.app/js/watchdog.js" />
+			</sourcefiles>
+			<targetfiles>
+				<include name="src/watchdog.web.app/js/watchdog.js" />
+			</targetfiles>
+		</uptodate>
+		<exec if="${not js.uptodate}" program="node" workingdir="src/watchdog.web.app/js" verbose="true">
+			<arg value="${path::get-full-path('node_modules/requirejs/bin/r.js')}" />
+			<arg value="-o" />
+			<arg value="name=main" />
+			<arg value="out=watchdog.js" />
+			<arg value="mainConfigFile=main.js" />
+		</exec>
+	</target>
+
+	<target name="clean.watchdog.web.js">
+		<delete file="src/watchdog.web.app/js/watchdog.js" />
+	</target>
+
+	<target name="build.watchdog.web.css" depends="node.less">
+		<uptodate property="css.uptodate">
+			<sourcefiles>
+				<include name="src/watchdog.web.app/css/**.less" />
+			</sourcefiles>
+			<targetfiles>
+				<include name="src/watchdog.web.app/css/**.css" />
+			</targetfiles>
+		</uptodate>
+		<foreach if="${not css.uptodate}" item="File" property="fileName">
+			<in>
+				<items>
+					<include name="src/watchdog.web.app/css/**.less"/>
+				</items>
+			</in>
+			<do>
+				<exec program="node" verbose="true">
+					<arg line="node_modules/less/bin/lessc" />
+					<arg line="${fileName}" />
+					<arg line="${string::replace(fileName, '.less', '.css')}" />
+				</exec>
+			</do>
+		</foreach>
+	</target>
+
+	<target name="build.watchdog.web.app">
+		<msbuild project="src/watchdog.web.app/watchdog.web.app.csproj">
+			<property name="Configuration" value="${Configuration}" />
+			<arg line="/m" />
+		</msbuild>
+	</target>
+
+	<target name="clean.watchdog.web.app">
+		<msbuild project="src/watchdog.web.app/watchdog.web.app.csproj">
+			<arg value="/target:Clean" />
+		</msbuild>
+	</target>
+
+	<target name="build.watchdog.data.migrations">
+		<msbuild project="src/watchdog.data.migrations/watchdog.data.migrations.csproj">
+			<property name="Configuration" value="${Configuration}" />
+			<arg line="/m" />
+		</msbuild>
+	</target>
+
+	<target name="clean.watchdog.data.migrations">
+		<msbuild project="src/watchdog.data.migrations/watchdog.data.migrations.csproj">
+			<arg value="/target:Clean" />
+		</msbuild>
+	</target>
+	
+	<target name="build.watchdog" depends="build.watchdog.web.app, build.watchdog.data.migrations, build.watchdog.web.jsx, build.watchdog.web.js, build.watchdog.web.css">
+		
+	</target>
+
+	<target name="clean.watchdog" depends="clean.watchdog.web.app, clean.watchdog.data.migrations, clean.watchdog.web.jsx, clean.watchdog.web.js">
+		
+	</target>
+	
+	<target name="build" depends="build.watchdog">
+		
+	</target>
+
+	<target name="clean" depends="clean.watchdog">
+		
+	</target>
+
+	<target name="migrate" depends="build.watchdog.data.migrations">
+		<property name="migrationVersion" value="0" if="${not property::exists('migrationVersion')}"/>
+		<property name="migrationTask" value="migrate" if="${not property::exists('migrationTask')} "/>
+		<migrate
+			database="sqlserver"
+			connection="Data Source=(local);Initial Catalog=watchdog;Trusted_Connection=True"
+			target="src/watchdog.data.migrations/bin/${Configuration}/watchdog.data.migrations.dll"
+			to="${migrationVersion}"
+			task="${migrationTask}"
+		/>
+	</target>
+</project>

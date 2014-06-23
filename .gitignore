@@ -1,0 +1,29 @@
+.nuget
+
+# Visual studio settings files
+*.DotSettings.user
+*.user
+*.suo
+
+# vim swap
+*.swp
+
+# nodejs modules
+node_modules
+
+# Nuget packages
+src/packages/
+
+# Binary output files
+src/*/bin/
+src/*/obj/
+
+# React JS output files
+src/watchdog.web.app/js/views/*/
+!src/watchdog.web.app/js/views/*.jsx/
+
+# JS output files
+src/watchdog.web.app/js/watchdog.js
+
+# CSS output files
+src/*/css/*/*.css

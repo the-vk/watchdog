@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "watchdog.web.app", "watchdog.web.app\watchdog.web.app.csproj", "{1B870E85-9AD7-421F-BE4D-C45D452BE41A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D176EAB5-5A47-414B-B4A1-91DE145609D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{945B9C09-D07D-495B-9AB6-4466C085C1E6}"
+	ProjectSection(SolutionItems) = preProject
+		..\watchdog.build = ..\watchdog.build
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "watchdog.data.model", "watchdog.data.model\watchdog.data.model.csproj", "{B207268E-4948-411B-868E-076FE4687407}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "watchdog.data.context", "watchdog.data.context\watchdog.data.context.csproj", "{F604BAF7-253E-4496-A3AB-FA897A974FDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "watchdog.data.migrations", "watchdog.data.migrations\watchdog.data.migrations.csproj", "{1982D104-1AF9-411A-B87E-3D7BE7CF3A30}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1B870E85-9AD7-421F-BE4D-C45D452BE41A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B870E85-9AD7-421F-BE4D-C45D452BE41A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B870E85-9AD7-421F-BE4D-C45D452BE41A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B870E85-9AD7-421F-BE4D-C45D452BE41A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B207268E-4948-411B-868E-076FE4687407}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B207268E-4948-411B-868E-076FE4687407}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B207268E-4948-411B-868E-076FE4687407}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B207268E-4948-411B-868E-076FE4687407}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F604BAF7-253E-4496-A3AB-FA897A974FDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F604BAF7-253E-4496-A3AB-FA897A974FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F604BAF7-253E-4496-A3AB-FA897A974FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F604BAF7-253E-4496-A3AB-FA897A974FDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1982D104-1AF9-411A-B87E-3D7BE7CF3A30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1982D104-1AF9-411A-B87E-3D7BE7CF3A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1982D104-1AF9-411A-B87E-3D7BE7CF3A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1982D104-1AF9-411A-B87E-3D7BE7CF3A30}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
